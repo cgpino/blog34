@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block subtitulo %}
+    <h2>Listado de usuarios:</h2>
+{% endblock %}
+
+{% block contenido %}
+    {% if usuarios %}
+        {% for usuario in usuarios %}
+            {% if user.is_authenticated and usuario == user %}
+              <input type="button" value="Modificar información" onclick="location.reload();location.href='/modificar-usuario/'"/>
+              <input type="button" value="Darse de baja" onclick="location.reload();location.href='/borrar-usuario/'"/>
+            {% endif %}
+            <li>
+              <b><a href="{% url 'ver-usuario' usuario.pk %}">{{ usuario.username }}</a></b>
+              <p>Última sesión: {{ usuario.last_login }}</p>
+              <p>
+                Permisos:
+                {% if usuario.is_staff %}
+                    <b>Administrador</b>
+                {% else %}
+                    <b>Usuario</b>
+                {% endif %}
+              </p>
+            </li>
+            <br>
+        {% endfor %}
+    {% else %}
+        <p>No hay ningún usuario</p>
+    {% endif %}
+{% endblock %}

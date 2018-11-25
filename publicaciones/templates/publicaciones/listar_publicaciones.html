@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block subtitulo %}
+    <h2>Listado de publicaciones:</h2>
+{% endblock %}
+
+{% block contenido %}
+    {% if publicaciones %}
+        {% for publicacion in publicaciones %}
+            {% if user.is_staff %}
+              <input type="button" value="Modificar publicación" onclick="location.reload();location.href='/modificar-publicacion/{{ publicacion.id }}'"/>
+              <input type="button" value="Borrar publicación" onclick="location.reload();location.href='/borrar-publicacion/{{ publicacion.id }}'"/>
+              <br>
+            {% endif %}
+            <b><a href="{% url 'ver-publicacion' publicacion.pk %}">{{ publicacion.titulo }}</a></b>
+            <p>Publicado por: <a href="{% url 'ver-usuario' publicacion.publicador.pk %}"><b>{{ publicacion.publicador.username }}</b></a></p>
+            <p>{{ publicacion.fecha }}</p>
+            <p>{{ publicacion.contenido }}</p>
+            <p>
+              Categorías:
+              {% for categoria in publicacion.categorias.all %}
+                <b><a href="{% url 'ver-categoria' categoria.pk %}">{{ categoria.nombre }}</a></b>
+              {% endfor %}
+            </p>
+            <p>Comentarios: {{ publicacion.comentarios.count }}</p>
+            <br>
+        {% endfor %}
+    {% else %}
+        <p>No hay ninguna publicación</p>
+    {% endif %}
+{% endblock %}

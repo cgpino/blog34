@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block subtitulo %}
+    <h2>Listado de categorías:</h2>
+{% endblock %}
+
+{% block contenido %}
+    {% if categorias %}
+        {% for categoria in categorias %}
+            {% if user.is_staff %}
+              <input type="button" value="Modificar categoría" onclick="location.reload();location.href='/modificar-categoria/{{ categoria.id }}'"/>
+              <input type="button" value="Borrar categoría" onclick="location.reload();location.href='/borrar-categoria/{{ categoria.id }}'"/>
+            {% endif %}
+            <li><a href="{% url 'ver-categoria' categoria.pk %}">{{ categoria.nombre }}</a></li>
+            <br>
+        {% endfor %}
+    {% else %}
+        <p>No hay ninguna categoría</p>
+    {% endif %}
+{% endblock %}

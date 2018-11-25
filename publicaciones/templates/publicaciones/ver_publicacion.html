@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block subtitulo %}
+    {% if user.is_staff %}
+      <input type="button" value="Modificar publicación" onclick="location.reload();location.href='/modificar-publicacion/{{ publicacion.id }}'"/>
+      <input type="button" value="Borrar publicación" onclick="location.reload();location.href='/borrar-publicacion/{{ publicacion.id }}'"/>
+    {% endif %}
+    <h2>{{ publicacion.titulo }}</h2>
+{% endblock %}
+
+{% block contenido %}
+    <p>Publicado por: <a href="{% url 'ver-usuario' publicacion.publicador.pk %}"><b>{{ publicacion.publicador.username }}</b></a></p>
+    <p>{{ publicacion.fecha }}</p>
+    <p>{{ publicacion.contenido }}</p>
+    <p>
+      Categorías:
+      {% for categoria in publicacion.categorias.all %}
+        <b><a href="{% url 'ver-categoria' categoria.pk %}">{{ categoria.nombre }}</a></b>
+      {% endfor %}
+    </p>
+    <br>
+
+    {% if user.is_authenticated %}
+      <b>Publicar comentario:</b>
+      {% include 'mensajes.html' %}
+
+      <form method="POST">
+          {% csrf_token %}
+          {{ formulario.as_p }}
+          <button type="submit">Publicar</button>
+      </form>
+    {% else %}
+      <b>Inicia sesión para publicar comentarios</b>
+      <input type="button" value="Iniciar sesión" onclick="location.reload();location.href='/iniciar-sesion'"/>
+    {% endif %}
+
+    <h3>Comentarios ({{ comentarios.count }}):</h3>
+
+    {% if comentarios.count != 0 %}
+        {% for comentario in comentarios %}
+
+            {% if user.is_staff %}
+              <input type="button" value="Borrar comentario" onclick="location.reload();location.href='/borrar-comentario/{{ comentario.id }}'"/>
+            {% endif %}
+
+            <li>
+              <b><a href="{% url 'ver-usuario' comentario.publicador.pk %}">{{ comentario.publicador.username }}</a></b>
+              <p>{{ comentario.fecha }}</p>
+              <p>{{ comentario.contenido }}</p>
+            </li>
+            <br>
+        {% endfor %}
+    {% else %}
+        <p>Esta publicación no tiene ningún comentario</p>
+    {% endif %}
+{% endblock %}

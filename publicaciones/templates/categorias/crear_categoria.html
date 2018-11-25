@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block subtitulo %}
+    <h2>Crear categoría</h2>
+{% endblock %}
+
+{% block contenido %}
+
+    {% include 'mensajes.html' %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ formulario.as_p }}
+        <button type="submit">Crear categoría</button>
+    </form>
+{% endblock %}

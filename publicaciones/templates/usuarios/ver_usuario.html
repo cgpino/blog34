@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block subtitulo %}
+    {% if user.is_authenticated and usuario == user %}
+      <input type="button" value="Modificar información" onclick="location.reload();location.href='/modificar-usuario/'"/>
+      <input type="button" value="Darse de baja" onclick="location.reload();location.href='/borrar-usuario/'"/>
+    {% endif %}
+    <h2>{{ usuario.username }}</h2>
+{% endblock %}
+
+{% block contenido %}
+    <p>Última sesión: {{ usuario.last_login }}</p>
+    <p>
+      Permisos:
+      {% if usuario.is_staff %}
+          <b>Administrador</b>
+      {% else %}
+          <b>Usuario</b>
+      {% endif %}
+    </p>
+    <p>Correo electrónico: <a href="mailto:{{ usuario.email }}"><b>{{ usuario.email }}</b></a></p>
+    <p>
+      Publicaciones:
+      {% if usuario.publicaciones.all %}
+        {% for publicacion in usuario.publicaciones.all %}
+          <b><a href="{% url 'ver-publicacion' publicacion.pk %}">{{ publicacion.titulo }}</a></b>
+        {% endfor %}
+      {% else %}
+        <b>Ninguna</b>
+      {% endif %}
+    </p>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block subtitulo %}
+    <h2>Iniciar Sesión</h2>
+{% endblock %}
+
+{% block contenido %}
+
+    {% include 'mensajes.html' %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ formulario.as_p }}
+        <button type="submit">Iniciar sesión</button>
+    </form>
+{% endblock %}

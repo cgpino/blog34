@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        {% block titulo %}<title>Blog 34</title>{% endblock %}
+    </head>
+    <body>
+
+        {% block titulo2 %}
+            <h1>Blog 34</h1>
+        {% endblock %}
+
+        {% block navbar %}
+          <nav>
+            <a href="{% url 'listar-publicaciones' %}">Inicio</a>
+            |
+            <a href="{% url 'listar-categorias' %}">Categorías</a>
+            |
+            <a href="{% url 'listar-usuarios' %}">Usuarios</a>
+            |
+            {% if user.is_authenticated %}
+
+              {% if user.is_staff %}
+                <a href="{% url 'crear-publicacion' %}">Crear publicación</a>
+                |
+                <a href="{% url 'crear-categoria' %}">Crear categoría</a>
+                |
+                <a href="/admin">Panel de administración</a>
+                |
+              {% endif %}
+              <a href="{% url 'cerrar-sesion' %}">Cerrar sesión</a>
+              |
+              Sesión iniciada como <a href="{% url 'ver-usuario' user.pk %}"><b>{{ user.username }}</b></a>
+            {% else %}
+              <a href="{% url 'iniciar-sesion' %}">Iniciar sesión</a>
+              |
+              <a href="{% url 'registrar-usuario' %}">Registrarse</a>
+            {% endif %}
+            <hr>
+          </nav>
+        {% endblock %}
+
+        {% block subtitulo %}
+        {% endblock %}
+
+        {% block contenido %}
+        {% endblock %}
+    </body>
+</html>
