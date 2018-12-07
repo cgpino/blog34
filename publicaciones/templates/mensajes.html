@@ -1,13 +1,13 @@
 {% if messages %}
     {% for message in messages %}
         {% if 'error' in message.tags %}
-            <div style="color:red">{{ message }}</div>
+            <div class="alert alert-danger">{{ message }}</div>
         {% elif 'success' in message.tags %}
-            <div style="color:green">{{ message }}</div>
+            <div class="alert alert-success">{{ message }}</div>
         {% elif 'warning' in message.tags %}
-            <div style="color:orange">{{ message }}</div>
+            <div class="alert alert-warning">{{ message }}</div>
         {% elif 'info' in message.tags %}
-            <div style="color:dodgerblue">{{ message }}</div>
+            <div class="alert alert-info">{{ message }}</div>
         {% else %}
             <div>{{ message }}</div>
         {% endif %}

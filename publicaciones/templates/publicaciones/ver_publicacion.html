@@ -1,37 +1,69 @@
 {% extends 'base.html' %}
 
 {% block subtitulo %}
+
+    <h1 class="mt-4">{{ publicacion.titulo }}</h1>
+    <p class="lead"> por <b><a href="{% url 'ver-usuario' publicacion.publicador.pk %}"><i class="fas fa-user-circle"></i> {{ publicacion.publicador.username }}</a></b></p>
+
     {% if user.is_staff %}
-      <input type="button" value="Modificar publicación" onclick="location.reload();location.href='/modificar-publicacion/{{ publicacion.id }}'"/>
-      <input type="button" value="Borrar publicación" onclick="location.reload();location.href='/borrar-publicacion/{{ publicacion.id }}'"/>
+      <a href="{% url 'modificar-publicacion' publicacion.pk %}" class="btn btn-warning"> <i class="fas fa-edit"></i> Modificar publicación</a>
+
+      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#borrar-publicacion">
+        <i class="fas fa-trash-alt"></i> Borrar publicación
+      </button>
+      <div class="modal fade" id="borrar-publicacion">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title"><i class="fas fa-trash-alt"></i> Borrar publicación</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              ¿Seguro que quieres borrar esta publicación?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i> Cancelar</button>
+              <a href="{% url 'borrar-publicacion' publicacion.pk %}" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar publicación</a>
+            </div>
+          </div>
+        </div>
+      </div>
     {% endif %}
-    <h2>{{ publicacion.titulo }}</h2>
+    <hr>
 {% endblock %}
 
 {% block contenido %}
-    <p>Publicado por: <a href="{% url 'ver-usuario' publicacion.publicador.pk %}"><b>{{ publicacion.publicador.username }}</b></a></p>
-    <p>{{ publicacion.fecha }}</p>
+
+    <p>Publicado el {{ publicacion.fecha }}</p>
+    <hr>
+    <img class="card-img-top" src="{{ publicacion.imagen.url }}" alt="{{ publicacion.titulo }}" height="500" width="900">
+    <hr>
     <p>{{ publicacion.contenido }}</p>
-    <p>
+    <p class=mb-4">
       Categorías:
       {% for categoria in publicacion.categorias.all %}
-        <b><a href="{% url 'ver-categoria' categoria.pk %}">{{ categoria.nombre }}</a></b>
+          <a href="{% url 'ver-categoria' categoria.pk %}"><button type="button" class="btn btn-secondary"><i class="fas fa-tag"></i> {{ categoria.nombre }}</button></a>
       {% endfor %}
     </p>
-    <br>
+    <hr>
 
     {% if user.is_authenticated %}
-      <b>Publicar comentario:</b>
       {% include 'mensajes.html' %}
-
-      <form method="POST">
-          {% csrf_token %}
-          {{ formulario.as_p }}
-          <button type="submit">Publicar</button>
-      </form>
+      <div class="card my-4">
+        <h5 class="card-header">Publicar un comentario:</h5>
+        <div class="card-body">
+          <form method="POST">
+            {% csrf_token %}
+            {{ formulario.as_p }}
+            <button type="submit" class="btn btn-primary"><i class="fas fa-share-square"></i> Enviar</button>
+          </form>
+        </div>
+      </div>
     {% else %}
-      <b>Inicia sesión para publicar comentarios</b>
-      <input type="button" value="Iniciar sesión" onclick="location.reload();location.href='/iniciar-sesion'"/>
+      <h4>Inicia sesión para poder publicar comentarios</h4>
+      <a href="{% url 'iniciar-sesion' %}" class="btn btn-primary"> <i class="fas fa-sign-in-alt"></i> Iniciar sesión</a>
+      <br>
+      <br>
     {% endif %}
 
     <h3>Comentarios ({{ comentarios.count }}):</h3>
@@ -40,17 +72,37 @@
         {% for comentario in comentarios %}
 
             {% if user.is_staff %}
-              <input type="button" value="Borrar comentario" onclick="location.reload();location.href='/borrar-comentario/{{ comentario.id }}'"/>
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#borrar-comentario">
+                <i class="fas fa-trash-alt"></i> Borrar comentario
+              </button>
+              <div class="modal fade" id="borrar-comentario">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title"><i class="fas fa-trash-alt"></i> Borrar comentario</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                      ¿Seguro que quieres borrar este comentario?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i> Cancelar</button>
+                      <a href="{% url 'borrar-comentario' comentario.pk %}" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar comentario</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
             {% endif %}
 
-            <li>
-              <b><a href="{% url 'ver-usuario' comentario.publicador.pk %}">{{ comentario.publicador.username }}</a></b>
-              <p>{{ comentario.fecha }}</p>
-              <p>{{ comentario.contenido }}</p>
-            </li>
-            <br>
+            <div class="media mb-4">
+              <div class="media-body">
+                <h5 class="mt-0"><a href="{% url 'ver-usuario' comentario.publicador.pk %}"><i class="fas fa-user-circle"></i> {{ comentario.publicador.username }}</a></h5>
+                <p>{{ comentario.fecha }}</p>
+                <p>{{ comentario.contenido }}</p>
+              </div>
+            </div>
         {% endfor %}
     {% else %}
-        <p>Esta publicación no tiene ningún comentario</p>
+        <div class="alert alert-info">Esta publicación no tiene ningún comentario actualmente</div>
     {% endif %}
 {% endblock %}

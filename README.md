@@ -1,4 +1,5 @@
 # blog34
+![](publicaciones/static/images/blog34-demo.png)
 Aplicación web escrita en Django que simula el funcionamiento de un blog con las funcionalidades básicas
 
 ## Requisitos

@@ -1,16 +1,21 @@
 {% extends 'base.html' %}
 
 {% block subtitulo %}
-    <h2>Iniciar Sesión</h2>
+    <h1 class="my-4"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</h1>
 {% endblock %}
 
 {% block contenido %}
 
     {% include 'mensajes.html' %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ formulario.as_p }}
-        <button type="submit">Iniciar sesión</button>
-    </form>
+    <div class="card my-4">
+      <h5 class="card-header">Sesión:</h5>
+      <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+            {{ formulario.as_p }}
+            <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</button>
+        </form>
+      </div>
+    </div>
 {% endblock %}

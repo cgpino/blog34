@@ -1,33 +1,58 @@
 {% extends 'base.html' %}
 
 {% block subtitulo %}
-    {% if user.is_authenticated and usuario == user %}
-      <input type="button" value="Modificar información" onclick="location.reload();location.href='/modificar-usuario/'"/>
-      <input type="button" value="Darse de baja" onclick="location.reload();location.href='/borrar-usuario/'"/>
-    {% endif %}
-    <h2>{{ usuario.username }}</h2>
+    <h1 class="my-4"><i class="fas fa-user-circle"></i> {{ usuario.username }}</h1>
 {% endblock %}
 
 {% block contenido %}
-    <p>Última sesión: {{ usuario.last_login }}</p>
-    <p>
-      Permisos:
-      {% if usuario.is_staff %}
-          <b>Administrador</b>
-      {% else %}
-          <b>Usuario</b>
-      {% endif %}
-    </p>
-    <p>Correo electrónico: <a href="mailto:{{ usuario.email }}"><b>{{ usuario.email }}</b></a></p>
-    <p>
-      Publicaciones:
-      {% if usuario.publicaciones.all %}
-        {% for publicacion in usuario.publicaciones.all %}
-          <b><a href="{% url 'ver-publicacion' publicacion.pk %}">{{ publicacion.titulo }}</a></b>
-        {% endfor %}
-      {% else %}
-        <b>Ninguna</b>
-      {% endif %}
-    </p>
 
+  {% if user.is_authenticated and usuario == user %}
+    <a href="{% url 'modificar-usuario' %}" class="btn btn-warning"> <i class="fas fa-user-edit"></i> Modificar información</a>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#borrar-usuario">
+      <i class="fas fa-user-injured"></i> Darse de baja
+    </button>
+    <div class="modal fade" id="borrar-usuario">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title"><i class="fas fa-user-injured"></i> Darse de baja</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            ¿Seguro que quieres darte de baja para siempre?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i> Cancelar</button>
+            <a href="{% url 'borrar-usuario' %}" class="btn btn-danger"><i class="fas fa-user-injured"></i> Darse de baja</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  <div class="card my-4">
+    <h5 class="card-header">Información:</h5>
+    <div class="card-body">
+      <p><i class="fas fa-user"></i> Usuario: <b>{{ usuario.username }}</b></p>
+      <p><i class="fas fa-at"></i> Correo electrónico: <a href="mailto:{{ usuario.email }}"><b>{{ usuario.email }}</b></a></p>
+      <p><i class="far fa-clock"></i> Última sesión: {{ usuario.last_login }}</p>
+      <p>
+        <i class="fas fa-certificate"></i> Permisos:
+        {% if usuario.is_staff %}
+            <span class="badge badge-success">Administrador</span>
+        {% else %}
+            <span class="badge badge-primary">Usuario</span>
+        {% endif %}
+      </p>
+      <p>
+        <i class="far fa-newspaper"></i> Publicaciones:
+        {% if usuario.publicaciones.all %}
+          {% for publicacion in usuario.publicaciones.all %}
+            <b><a href="{% url 'ver-publicacion' publicacion.pk %}"><button type="button" class="btn btn-secondary"><i class="far fa-newspaper"></i> {{ publicacion.titulo }}</button></a></b>
+          {% endfor %}
+        {% else %}
+          <b>Ninguna</b>
+        {% endif %}
+      </p>
+    </div>
+  </div>
 {% endblock %}

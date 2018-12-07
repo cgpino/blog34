@@ -1,16 +1,21 @@
 {% extends 'base.html' %}
 
 {% block subtitulo %}
-    <h2>Cambiar contraseña</h2>
+    <h1 class="my-4"><i class="fas fa-key"></i> Cambiar contraseña</h1>
 {% endblock %}
 
 {% block contenido %}
 
     {% include 'mensajes.html' %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ formulario.as_p }}
-        <button type="submit">Cambiar contraseña</button>
-    </form>
+    <div class="card my-4">
+      <h5 class="card-header">Contraseña:</h5>
+      <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+            {{ formulario.as_p }}
+            <button type="submit" class="btn btn-warning"><i class="fas fa-exchange-alt"></i> Cambiar</button>
+        </form>
+      </div>
+    </div>
 {% endblock %}

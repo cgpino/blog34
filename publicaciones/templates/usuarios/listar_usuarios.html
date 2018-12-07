@@ -1,31 +1,39 @@
 {% extends 'base.html' %}
 
 {% block subtitulo %}
-    <h2>Listado de usuarios:</h2>
+    <h1 class="my-4"><i class="fas fa-users"></i> Listado de usuarios</h1>
 {% endblock %}
 
 {% block contenido %}
     {% if usuarios %}
-        {% for usuario in usuarios %}
-            {% if user.is_authenticated and usuario == user %}
-              <input type="button" value="Modificar información" onclick="location.reload();location.href='/modificar-usuario/'"/>
-              <input type="button" value="Darse de baja" onclick="location.reload();location.href='/borrar-usuario/'"/>
-            {% endif %}
-            <li>
-              <b><a href="{% url 'ver-usuario' usuario.pk %}">{{ usuario.username }}</a></b>
-              <p>Última sesión: {{ usuario.last_login }}</p>
-              <p>
-                Permisos:
+
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th><i class="fas fa-user"></i> Usuario</th>
+            <th><i class="fas fa-at"></i> Correo electrónico</th>
+            <th><i class="far fa-clock"></i> Ultima sesión</th>
+            <th><i class="fas fa-certificate"></i> Permisos</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for usuario in usuarios %}
+
+              <tr>
+                <td><b><a href="{% url 'ver-usuario' usuario.pk %}"><i class="fas fa-user-circle"></i> {{ usuario.username }}</a></b></td>
+                <td><a href="mailto:{{ usuario.email }}"><b>{{ usuario.email }}</b></a></td>
+                <td>{{ usuario.last_login }}</td>
                 {% if usuario.is_staff %}
-                    <b>Administrador</b>
+                  <td><span class="badge badge-success">Administrador</span></td>
                 {% else %}
-                    <b>Usuario</b>
+                  <td><span class="badge badge-primary">Usuario</span></td>
                 {% endif %}
-              </p>
-            </li>
-            <br>
-        {% endfor %}
+              </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
     {% else %}
-        <p>No hay ningún usuario</p>
+        <div class="alert alert-info">No hay ningún usuario actualmente</div>
     {% endif %}
 {% endblock %}

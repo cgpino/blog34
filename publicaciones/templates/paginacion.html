@@ -1,0 +1,28 @@
+<!-- Pagination -->
+<center>
+  <span class="current">
+      <p><b><i class="fas fa-file"></i> Página {{ publicaciones.number }} de {{ publicaciones.paginator.num_pages }}</b></p>
+  </span>
+</center>
+
+<ul class="pagination justify-content-center mb-4">
+    {% if publicaciones.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ publicaciones.previous_page_number }}">&larr; Anterior</a>
+        </li>
+    {% else %}
+        <li class="page-item disabled">
+            <p class="page-link">&larr; Anterior</p>
+        </li>
+    {% endif %}
+
+    {% if publicaciones.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ publicaciones.next_page_number }}">Siguiente &rarr;</a>
+        </li>
+    {% else %}
+        <li class="page-item disabled">
+            <p class="page-link">Siguiente &rarr;</p>
+        </li>
+    {% endif %}
+</ul>

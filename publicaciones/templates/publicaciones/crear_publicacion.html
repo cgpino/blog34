@@ -1,16 +1,21 @@
 {% extends 'base.html' %}
 
 {% block subtitulo %}
-    <h2>Crear publicación</h2>
+    <h1 class="my-4"><i class="far fa-newspaper"></i> Crear publicación</h1>
 {% endblock %}
 
 {% block contenido %}
 
     {% include 'mensajes.html' %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ formulario.as_p }}
-        <button type="submit">Publicar</button>
-    </form>
+    <div class="card my-4">
+      <h5 class="card-header">Publicación:</h5>
+      <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ formulario.as_p }}
+            <button type="submit" class="btn btn-primary"><i class="fas fa-share-square"></i> Publicar</button>
+        </form>
+      </div>
+    </div>
 {% endblock %}

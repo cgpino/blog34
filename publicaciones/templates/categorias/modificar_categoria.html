@@ -1,16 +1,21 @@
 {% extends 'base.html' %}
 
 {% block subtitulo %}
-    <h2>Modificar categoría</h2>
+    <h1 class="my-4"><i class="fas fa-tags"></i> Modificar categoría</h1>
 {% endblock %}
 
 {% block contenido %}
 
     {% include 'mensajes.html' %}
 
-    <form method="POST">
-        {% csrf_token %}
-        {{ formulario.as_p }}
-        <button type="submit">Modificar</button>
-    </form>
+    <div class="card my-4">
+      <h5 class="card-header">Categoría:</h5>
+      <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+            {{ formulario.as_p }}
+            <button type="submit" class="btn btn-warning"><i class="fas fa-edit"></i> Modificar</button>
+        </form>
+      </div>
+    </div>
 {% endblock %}

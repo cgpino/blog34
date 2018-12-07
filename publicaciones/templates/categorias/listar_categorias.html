@@ -1,20 +1,56 @@
 {% extends 'base.html' %}
 
 {% block subtitulo %}
-    <h2>Listado de categorías:</h2>
+    <h1 class="my-4"><i class="fas fa-tags"></i> Listado de categorías</h1>
 {% endblock %}
 
 {% block contenido %}
     {% if categorias %}
-        {% for categoria in categorias %}
-            {% if user.is_staff %}
-              <input type="button" value="Modificar categoría" onclick="location.reload();location.href='/modificar-categoria/{{ categoria.id }}'"/>
-              <input type="button" value="Borrar categoría" onclick="location.reload();location.href='/borrar-categoria/{{ categoria.id }}'"/>
-            {% endif %}
-            <li><a href="{% url 'ver-categoria' categoria.pk %}">{{ categoria.nombre }}</a></li>
-            <br>
-        {% endfor %}
+
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th><i class="fas fa-tag"></i> Categoría</th>
+              {% if user.is_staff %}
+                <th><i class="fas fa-wrench"></i> Administración</th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for categoria in categorias %}
+                <tr>
+                  <td><b><a href="{% url 'ver-categoria' categoria.pk %}">{{ categoria.nombre }}</a></b></td>
+                  {% if user.is_staff %}
+                    <td>
+                      <a href="{% url 'modificar-categoria' categoria.pk %}" class="btn btn-warning"> <i class="fas fa-user-edit"></i> Modificar categoría</a>
+
+                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#borrar-categoria">
+                        <i class="fas fa-trash-alt"></i> Borrar categoría
+                      </button>
+                      <div class="modal fade" id="borrar-categoria">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title"><i class="fas fa-trash-alt"></i> Borrar categoría</h4>
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                              ¿Seguro que quieres borrar esta categoría?
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-ban"></i> Cancelar</button>
+                              <a href="{% url 'borrar-categoria' categoria.pk %}" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Borrar categoría</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  {% endif %}
+                </tr>
+            {% endfor %}
+          </tbody>
+        </table>
     {% else %}
-        <p>No hay ninguna categoría</p>
+        <div class="alert alert-info">No hay ninguna categoría actualmente</div>
     {% endif %}
 {% endblock %}

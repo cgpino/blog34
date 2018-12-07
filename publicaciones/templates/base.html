@@ -1,49 +1,112 @@
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         {% block titulo %}<title>Blog 34</title>{% endblock %}
+
+        <!-- CSS Bootstrap -->
+        <link rel="stylesheet" href="{% static "css/bootstrap.min.css" %}">
+
+        <!-- Icons -->
+        <link rel="stylesheet" href="{% static "css/all.min.css" %}">
+
+        <style>
+          body {
+            padding-top: 54px;
+          }
+
+          @media (min-width: 992px) {
+            body {
+              padding-top: 56px;
+            }
+          }
+        </style>
     </head>
     <body>
 
-        {% block titulo2 %}
-            <h1>Blog 34</h1>
-        {% endblock %}
-
         {% block navbar %}
-          <nav>
-            <a href="{% url 'listar-publicaciones' %}">Inicio</a>
-            |
-            <a href="{% url 'listar-categorias' %}">Categorías</a>
-            |
-            <a href="{% url 'listar-usuarios' %}">Usuarios</a>
-            |
-            {% if user.is_authenticated %}
-
-              {% if user.is_staff %}
-                <a href="{% url 'crear-publicacion' %}">Crear publicación</a>
-                |
-                <a href="{% url 'crear-categoria' %}">Crear categoría</a>
-                |
-                <a href="/admin">Panel de administración</a>
-                |
-              {% endif %}
-              <a href="{% url 'cerrar-sesion' %}">Cerrar sesión</a>
-              |
-              Sesión iniciada como <a href="{% url 'ver-usuario' user.pk %}"><b>{{ user.username }}</b></a>
-            {% else %}
-              <a href="{% url 'iniciar-sesion' %}">Iniciar sesión</a>
-              |
-              <a href="{% url 'registrar-usuario' %}">Registrarse</a>
-            {% endif %}
-            <hr>
+          <!-- Navbar -->
+          <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container">
+              <a class="navbar-brand" href="{% url 'listar-publicaciones' %}"><i class="fas fa-book"></i> Blog 34</a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav mr-auto">
+                  <li {% if navbar == 'publicaciones' %}class="nav-item active"{% else %}class="nav-item"{% endif %}>
+                    <a class="nav-link" href="{% url 'listar-publicaciones' %}"><i class="far fa-newspaper"></i> Publicaciones
+                    </a>
+                  </li>
+                  <li {% if navbar == 'categorias' %}class="nav-item active"{% else %}class="nav-item"{% endif %}>
+                    <a class="nav-link" href="{% url 'listar-categorias' %}"><i class="fas fa-tags"></i> Categorías</a>
+                  </li>
+                  <li {% if navbar == 'usuarios' %}class="nav-item active"{% else %}class="nav-item"{% endif %}>
+                    <a class="nav-link" href="{% url 'listar-usuarios' %}"><i class="fas fa-users"></i> Usuarios</a>
+                  </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                  {% if user.is_authenticated %}
+                    {% if user.is_staff %}
+                      <li {% if navbar == 'administracion' %}class="nav-item dropdown active"{% else %}class="nav-item dropdown"{% endif %}>
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-wrench"></i> Administración
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="{% url 'crear-publicacion' %}"><i class="far fa-newspaper"></i> Crear publicación</a>
+                          <a class="dropdown-item" href="{% url 'crear-categoria' %}"><i class="fas fa-tags"></i> Crear categoría</a>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="/admin/"><i class="fas fa-sliders-h"></i> Panel de administración</a>
+                        </div>
+                      </li>
+                    {% endif %}
+                    <li {% if navbar == 'perfil' %}class="nav-item dropdown active"{% else %}class="nav-item dropdown"{% endif %}>
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-user-circle"></i> {{ user.username }}
+                      </a>
+                      <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'ver-usuario' user.pk %}"><i class="fas fa-user"></i> Mi perfil</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'cerrar-sesion' %}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
+                      </div>
+                    </li>
+                  {% else %}
+                    <li {% if navbar == 'iniciar-sesion' %}class="nav-item active"{% else %}class="nav-item"{% endif %}>
+                      <a class="nav-link" href="{% url 'iniciar-sesion' %}"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a>
+                    </li>
+                    <li {% if navbar == 'registrar-usuario' %}class="nav-item active"{% else %}class="nav-item"{% endif %}>
+                      <a class="nav-link" href="{% url 'registrar-usuario' %}"><i class="fas fa-user-plus"></i> Registrarse</a>
+                    </li>
+                  {% endif %}
+                </ul>
+              </div>
+            </div>
           </nav>
         {% endblock %}
 
-        {% block subtitulo %}
-        {% endblock %}
+        <!-- Page Content -->
+        <div class="container">
 
-        {% block contenido %}
-        {% endblock %}
+          {% block subtitulo %}
+          {% endblock %}
+
+          {% block contenido %}
+          {% endblock %}
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="py-5 bg-dark">
+          <div class="container">
+              <p class="m-0 text-center text-white">Blog34 &copy; 2018 - Carlos Gómez Pino <a href="mailto:cgpino34@gmail.com">(cgpino34@gmail.com)</a></p>
+          </div>
+        </footer>
+
+        <!-- JavaScript Bootstrap -->
+        <script src="{% static "js/jquery.min.js" %}"></script>
+        <script src="{% static "js/bootstrap.bundle.min.js" %}"></script>
     </body>
 </html>

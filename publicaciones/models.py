@@ -16,6 +16,7 @@ class Publicacion(models.Model):
     titulo = models.CharField(max_length=150)
     publicador = models.ForeignKey(User, on_delete=models.CASCADE, related_name='publicaciones')
     contenido = models.TextField()
+    imagen = models.FileField()
     categorias = models.ManyToManyField(Categoria, related_name='publicaciones')
     fecha = models.DateTimeField(auto_now_add=True)
 
